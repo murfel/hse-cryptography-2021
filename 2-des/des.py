@@ -147,7 +147,7 @@ class DESEnctyption:
             l = r_prev
             r = DESEnctyption._xor(l_prev, DESEnctyption._feistel_function(r_prev, key))
             l_prev, r_prev = l, r
-        text = l + r
+        text = l_prev + r_prev
         text = DESEnctyption._apply_perm(text, DESEnctyption.REVERSE_PERMUTATION)
         return text
 
