@@ -3,8 +3,6 @@ from functools import reduce
 from math import gcd
 from typing import List, Tuple, Dict
 
-from scipy.stats import chisquare
-
 english_letter_distribution = {'e': 0.12,
                                't': 0.091,
                                'a': 0.0812,
@@ -97,21 +95,18 @@ def dist_match_score(true_dist: Dict[str, float], dist: Dict[str, float], text_l
     for key in true_dist.keys():
         true_dist_arr.append(true_dist[key] * text_len)
         dist_arr.append(dist[key])
-    chisq, p = chisquare(dist_arr, true_dist_arr)
-    print(chisq, p)
-    return -p
-    # error = 0
-    # total = float(len(text))
-    # for key in dist.keys():
-    #     dist[key] /= total
-    # for key in true_dist.keys():
-    #     error += (true_dist[key] - dist[key]) ** 2
-    # return error
+    error = 0
+    for key in true_dist.keys():
+        error += (true_dist[key] - dist[key]) ** 2
+    return error
 
 
 def calc_letter_dist(text: str) -> Dict[str, float]:
     from collections import Counter
     dist = Counter(text)
+    total = len(text)
+    for key in dist.keys():
+        dist[key] /= total
     return dist
 
 
@@ -128,7 +123,6 @@ def guess_one_letter_key(text: str) -> str:
         key_to_score[letter] = dist_match_score(english_letter_distribution, dists, len(text))
     keys = key_to_score.items()
     keys = sorted(keys, key=lambda x: x[1])
-    print(keys[:3])
     return keys[0][0]
 
 
@@ -145,7 +139,4 @@ def kasiski_test(text: str, key_length=None):
             key.append(key_letter)
         keys.append(key)
     keys = [''.join(key) for key in keys]
-    for key in keys:
-        decr = decrypt(text, key)
-        print(key, decr)
     return keys

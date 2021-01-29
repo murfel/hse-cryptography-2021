@@ -114,14 +114,15 @@ def encrypt_decrtypt():
 
 
 def test():
-    # text = 'hello there my name is potato'
-    # text = clean_text(text)
-    # cyphertext = vigenere.encrypt(text, 'c')
-    # vigenere.kasiski_test(cyphertext, 1)
+    text = 'hello there my name is potato'
+    text = clean_text(text)
+    key = 'c'
+    cyphertext = vigenere.encrypt(text, key)
+    guessed_keys = vigenere.kasiski_test(cyphertext, len(key))
+    assert guessed_keys[0] == key
 
-    # text = clean_text(long_text)
-    # cyphertext = vigenere.encrypt(text, 'andrew')
-    # vigenere.kasiski_test(cyphertext, 6)
-
-    cyphertext = 'vhvsspqucemrvbvbbbvhvsurqgibdugrnicjqucervuaxssr'
-    vigenere.kasiski_test(cyphertext, 6)
+    text = clean_text(long_text)
+    key = 'andrew'
+    cyphertext = vigenere.encrypt(text, key)
+    guessed_keys = vigenere.kasiski_test(cyphertext, len(key))
+    assert guessed_keys[0] == key
